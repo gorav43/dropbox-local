@@ -1,583 +1,709 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DropBox Local</title>
+    <title>DropBox Local — File Sharing</title>
+    <meta
+        name="description"
+        content="Fast and simple file sharing with DropBox Local."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main class="container">
+<!-- ================= NAVBAR ================= -->
 
-        <h1>DropBox Local</h1>
+<header class="navbar">
 
-        <p class="subtitle">
-            Fast and simple file sharing
-        </p>
+    <a href="#" class="brand">
+        <div class="brand-icon">
+            <span></span>
+            <span></span>
+        </div>
 
-        <!-- UPLOAD -->
+        <div class="brand-text">
+            <strong>DropBox Local</strong>
+            <small>Simple file sharing</small>
+        </div>
+    </a>
 
-        <section class="card">
+    <nav class="nav-links">
+        <a href="#upload">Transfer</a>
+        <a href="#about">About</a>
+        <a href="#receive">Receive</a>
+        <a href="#faq">FAQ</a>
+    </nav>
 
-            <div class="drop-zone" id="dropZone">
+    <div class="nav-actions">
+        <a href="#upload" class="nav-button">
+            Start sharing
+        </a>
 
-                <h2>Drop your file here</h2>
+        <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            aria-label="Open menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+
+</header>
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#upload">Transfer</a>
+    <a href="#about">About</a>
+    <a href="#receive">Receive</a>
+    <a href="#faq">FAQ</a>
+</div>
+
+
+<!-- ================= HERO ================= -->
+
+<main>
+
+<section class="hero" id="upload">
+
+    <div class="hero-inner">
+
+        <!-- LEFT UPLOAD -->
+
+        <div class="upload-side">
+
+            <div
+                class="drop-zone"
+                id="dropZone"
+            >
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    multiple
+                    hidden
+                >
+
+                <div class="upload-symbol">
+                    +
+                </div>
+
+                <h3>Drop your files here</h3>
 
                 <p>
-                    or click to select a file
+                    Click to browse or drag files here
+                    to start sharing
                 </p>
 
-                <button class="primary" type="button" id="chooseBtn">
-                    Choose File
+                <button
+                    type="button"
+                    class="browse-button"
+                    id="browseBtn"
+                >
+                    Browse files
                 </button>
 
-                <input type="file" id="fileInput">
+                <span class="upload-hint">
+                    Multiple files supported
+                </span>
 
             </div>
 
-            <div class="file-list" id="fileList"></div>
 
-            <div class="actions">
+            <!-- SELECTED FILES -->
 
-                <button class="primary" id="uploadBtn" type="button">
-                    Upload File
-                </button>
+            <div
+                class="selected-files-section"
+                id="selectedFilesSection"
+                hidden
+            >
 
-                <button class="secondary" id="clearBtn" type="button">
-                    Clear
-                </button>
+                <div class="section-mini-header">
+                    <div>
+                        <span class="mini-label">READY TO SHARE</span>
+                        <h3>Selected files</h3>
+                    </div>
 
-            </div>
-
-            <div class="message" id="uploadMessage"></div>
-
-        </section>
-
-        <!-- RESULT -->
-
-        <section class="card hidden" id="resultCard">
-
-            <h2>File Ready</h2>
-
-            <div class="result">
-
-                <p>Share Code</p>
-
-                <div class="code" id="shareCode">
-                    ------
+                    <button
+                        type="button"
+                        id="clearFilesBtn"
+                        class="text-button"
+                    >
+                        Clear
+                    </button>
                 </div>
 
-                <p>Share Link</p>
+                <div
+                    class="file-list"
+                    id="fileList"
+                ></div>
 
-                <input class="share-link" id="shareLink" readonly>
+                <button
+                    type="button"
+                    id="uploadBtn"
+                    class="primary-action"
+                >
+                    <span>Upload & Share</span>
+                    <span class="arrow">→</span>
+                </button>
 
-                <div class="actions">
+            </div>
 
-                    <button class="primary" id="copyBtn" type="button">
-                        Copy Link
-                    </button>
 
-                    <button class="secondary" id="downloadBtn" type="button">
-                        Download
+            <!-- UPLOAD PROGRESS -->
+
+            <div
+                class="upload-progress"
+                id="uploadProgress"
+                hidden
+            >
+
+                <div class="progress-top">
+                    <span>Uploading files...</span>
+                    <strong id="progressPercent">0%</strong>
+                </div>
+
+                <div class="progress-track">
+                    <div
+                        class="progress-fill"
+                        id="progressFill"
+                    ></div>
+                </div>
+
+                <p id="progressText">
+                    Preparing upload...
+                </p>
+
+            </div>
+
+
+            <div
+                class="error-message"
+                id="uploadError"
+                hidden
+            ></div>
+
+
+            <!-- SHARE RESULT -->
+
+            <div
+                class="share-result"
+                id="shareResult"
+                hidden
+            >
+
+                <div class="result-label">
+                    YOUR FILES ARE READY
+                </div>
+
+                <h3>Share this transfer</h3>
+
+                <div class="share-code-box">
+
+                    <div>
+                        <span>Share code</span>
+                        <strong id="shareCode">------</strong>
+                    </div>
+
+                    <button
+                        id="copyCodeBtn"
+                        type="button"
+                    >
+                        Copy
                     </button>
 
                 </div>
 
-                <div class="message" id="expiryMessage"></div>
+
+                <div class="share-link-box">
+
+                    <div class="link-content">
+                        <span>Share link</span>
+                        <p id="shareLink">
+                            -
+                        </p>
+                    </div>
+
+                    <button
+                        id="copyLinkBtn"
+                        type="button"
+                    >
+                        Copy
+                    </button>
+
+                </div>
+
+
+                <div class="qr-wrapper">
+
+                    <div
+                        class="qr-container"
+                        id="qrContainer"
+                    ></div>
+
+                    <p>
+                        Scan this QR code to receive
+                        the files
+                    </p>
+
+                </div>
+
+
+                <div class="expiry-row">
+
+                    <span>
+                        Expires in
+                    </span>
+
+                    <strong id="expiryBadge">
+                        10:00
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="newUploadBtn"
+                    class="secondary-action"
+                >
+                    Create another transfer
+                </button>
 
             </div>
 
-        </section>
+        </div>
 
-        <!-- RECEIVE -->
 
-        <section class="card">
+        <!-- RIGHT HERO CONTENT -->
 
-            <h2>Receive File</h2>
+        <div class="hero-content">
 
-            <p class="subtitle">
-                Enter the share code
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                FAST • SIMPLE • PRIVATE
+            </div>
+
+            <h1>
+                Share files
+                <span>anywhere.</span>
+            </h1>
+
+            <p class="hero-description">
+                Send files directly from your device
+                with a simple share code or link.
+                No complicated setup. Just upload,
+                share and download.
             </p>
 
-            <div class="receive-row">
 
-                <input type="text" id="codeInput" placeholder="Example: A1B2C3D4">
+            <div class="features">
 
-                <button class="primary" id="receiveBtn" type="button">
-                    Find File
-                </button>
+                <div class="feature">
 
-            </div>
-
-            <div class="message" id="receiveMessage"></div>
-
-            <div class="download-area hidden" id="receiveResult">
-
-                <div class="result">
-
-                    <h3 id="receiveFileName">
-                        File
-                    </h3>
-
-                    <p id="receiveFileSize"></p>
-
-                    <button class="primary" id="receiveDownloadBtn" type="button">
-                        Download File
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <script>
-        const fileInput =
-            document.getElementById("fileInput");
-
-        const dropZone =
-            document.getElementById("dropZone");
-
-        const chooseBtn =
-            document.getElementById("chooseBtn");
-
-        const fileList =
-            document.getElementById("fileList");
-
-        const uploadBtn =
-            document.getElementById("uploadBtn");
-
-        const clearBtn =
-            document.getElementById("clearBtn");
-
-        const uploadMessage =
-            document.getElementById("uploadMessage");
-
-        const resultCard =
-            document.getElementById("resultCard");
-
-        const shareCode =
-            document.getElementById("shareCode");
-
-        const shareLink =
-            document.getElementById("shareLink");
-
-        const copyBtn =
-            document.getElementById("copyBtn");
-
-        const downloadBtn =
-            document.getElementById("downloadBtn");
-
-        const expiryMessage =
-            document.getElementById("expiryMessage");
-
-        const codeInput =
-            document.getElementById("codeInput");
-
-        const receiveBtn =
-            document.getElementById("receiveBtn");
-
-        const receiveMessage =
-            document.getElementById("receiveMessage");
-
-        const receiveResult =
-            document.getElementById("receiveResult");
-
-        const receiveFileName =
-            document.getElementById("receiveFileName");
-
-        const receiveFileSize =
-            document.getElementById("receiveFileSize");
-
-        const receiveDownloadBtn =
-            document.getElementById(
-                "receiveDownloadBtn"
-            );
-
-        let selectedFile = null;
-        let currentCode = null;
-
-        // ==========================
-        // FILE SELECT
-        // ==========================
-
-        chooseBtn.addEventListener(
-            "click",
-            () => fileInput.click()
-        );
-
-        dropZone.addEventListener(
-            "click",
-            (event) => {
-
-                if (event.target === chooseBtn) {
-                    return;
-                }
-
-                fileInput.click();
-            }
-        );
-
-        fileInput.addEventListener(
-            "change",
-            () => {
-
-                if (fileInput.files.length > 0) {
-
-                    selectedFile =
-                        fileInput.files[0];
-
-                    showSelectedFile();
-                }
-            }
-        );
-
-        // ==========================
-        // DRAG & DROP
-        // ==========================
-
-        dropZone.addEventListener(
-            "dragover",
-            (event) => {
-                event.preventDefault();
-            }
-        );
-
-        dropZone.addEventListener(
-            "drop",
-            (event) => {
-
-                event.preventDefault();
-
-                if (event.dataTransfer.files.length > 0) {
-
-                    selectedFile =
-                        event.dataTransfer.files[0];
-
-                    showSelectedFile();
-                }
-            }
-        );
-
-        // ==========================
-        // SHOW FILE
-        // ==========================
-
-        function showSelectedFile() {
-
-            if (!selectedFile) {
-                return;
-            }
-
-            fileList.innerHTML = `
-                <div class="file-item">
-                    <div class="file-name">
-                        ${escapeHtml(selectedFile.name)}
+                    <div class="feature-icon">
+                        ↗
                     </div>
 
                     <div>
-                        ${formatSize(selectedFile.size)}
+                        <strong>Fast transfers</strong>
+                        <p>
+                            Upload and share your files
+                            in seconds.
+                        </p>
                     </div>
+
                 </div>
-            `;
 
-            uploadMessage.textContent = "";
-        }
 
-        // ==========================
-        // UPLOAD
-        // ==========================
+                <div class="feature">
 
-        uploadBtn.addEventListener(
-            "click",
-            async () => {
+                    <div class="feature-icon">
+                        ∞
+                    </div>
 
-                if (!selectedFile) {
+                    <div>
+                        <strong>Multiple files</strong>
+                        <p>
+                            Send multiple files
+                            together.
+                        </p>
+                    </div>
 
-                    uploadMessage.textContent =
-                        "Please select a file first.";
+                </div>
 
-                    return;
-                }
 
-                uploadBtn.disabled = true;
+                <div class="feature">
 
-                uploadMessage.textContent =
-                    "Uploading...";
+                    <div class="feature-icon">
+                        ↔
+                    </div>
 
-                const formData =
-                    new FormData();
+                    <div>
+                        <strong>Easy sharing</strong>
+                        <p>
+                            Use a short code or
+                            shareable link.
+                        </p>
+                    </div>
 
-                formData.append(
-                    "file",
-                    selectedFile
-                );
+                </div>
 
-                try {
 
-                    const response =
-                        await fetch(
-                            "/api/upload",
-                            {
-                                method: "POST",
-                                body: formData
-                            }
-                        );
+                <div class="feature">
 
-                    const data =
-                        await response.json();
+                    <div class="feature-icon">
+                        ◷
+                    </div>
 
-                    if (!response.ok ||
-                        !data.success) {
+                    <div>
+                        <strong>Temporary sharing</strong>
+                        <p>
+                            Transfers automatically
+                            expire.
+                        </p>
+                    </div>
 
-                        throw new Error(
-                            data.message ||
-                            "Upload failed"
-                        );
-                    }
+                </div>
 
-                    currentCode =
-                        data.file.code;
+            </div>
 
-                    shareCode.textContent =
-                        data.file.code;
+        </div>
 
-                    shareLink.value =
-                        data.file.shareUrl;
+    </div>
 
-                    expiryMessage.textContent =
-                        "This file will expire in 10 minutes.";
 
-                    resultCard.classList.remove(
-                        "hidden"
-                    );
+    <a
+        href="#receive"
+        class="scroll-indicator"
+        aria-label="Scroll down"
+    >
+        ↓
+    </a>
 
-                    uploadMessage.textContent =
-                        "Upload successful.";
+</section>
 
-                } catch (error) {
 
-                    console.error(error);
+<!-- ================= RECEIVE ================= -->
 
-                    uploadMessage.textContent =
-                        error.message ||
-                        "Upload failed.";
+<section class="receive-section" id="receive">
 
-                } finally {
+    <div class="section-container">
 
-                    uploadBtn.disabled = false;
-                }
-            }
-        );
+        <div class="section-heading">
 
-        // ==========================
-        // COPY
-        // ==========================
+            <span class="eyebrow">
+                RECEIVE FILES
+            </span>
 
-        copyBtn.addEventListener(
-            "click",
-            async () => {
+            <h2>
+                Got a share code?
+            </h2>
 
-                await navigator.clipboard.writeText(
-                    shareLink.value
-                );
+            <p>
+                Enter the code shared with you
+                to access the files.
+            </p>
 
-                copyBtn.textContent =
-                    "Copied!";
+        </div>
 
-                setTimeout(() => {
 
-                    copyBtn.textContent =
-                        "Copy Link";
+        <form
+            class="receive-form"
+            id="receiveForm"
+        >
 
-                }, 1500);
-            }
-        );
+            <div class="code-input-wrapper">
 
-        // ==========================
-        // DOWNLOAD OWNER FILE
-        // ==========================
+                <label for="codeInput">
+                    Share code
+                </label>
 
-        downloadBtn.addEventListener(
-            "click",
-            () => {
+                <input
+                    type="text"
+                    id="codeInput"
+                    placeholder="Enter your code"
+                    autocomplete="off"
+                    maxlength="20"
+                >
 
-                if (!currentCode) {
-                    return;
-                }
+            </div>
 
-                window.location.href =
-                    `/api/download/${currentCode}`;
-            }
-        );
+            <button
+                type="submit"
+                class="primary-action receive-button"
+            >
+                <span>Receive files</span>
+                <span class="arrow">→</span>
+            </button>
 
-        // ==========================
-        // RECEIVE
-        // ==========================
+        </form>
 
-        receiveBtn.addEventListener(
-            "click",
-            async () => {
 
-                const code =
-                    codeInput.value
-                        .trim()
-                        .toUpperCase();
+        <div
+            class="error-message"
+            id="receiveError"
+            hidden
+        ></div>
 
-                if (!code) {
 
-                    receiveMessage.textContent =
-                        "Enter a share code.";
+        <!-- RECEIVED RESULT -->
 
-                    return;
-                }
+        <div
+            class="receive-result"
+            id="receiveResult"
+            hidden
+        >
 
-                receiveMessage.textContent =
-                    "Searching...";
+            <div class="received-header">
 
-                receiveResult.classList.add(
-                    "hidden"
-                );
+                <div>
+                    <span class="mini-label">
+                        TRANSFER FOUND
+                    </span>
 
-                try {
+                    <h3>
+                        Your files
+                    </h3>
+                </div>
 
-                    const response =
-                        await fetch(
-                            `/api/file/${encodeURIComponent(code)}`
-                        );
+                <span
+                    class="expiry-badge"
+                    id="expiryBadgeReceive"
+                >
+                    Active
+                </span>
 
-                    const data =
-                        await response.json();
+            </div>
 
-                    if (!response.ok ||
-                        !data.success) {
 
-                        throw new Error(
-                            data.message ||
-                            "File not found"
-                        );
-                    }
+            <div
+                class="received-files"
+                id="receivedFiles"
+            ></div>
 
-                    receiveFileName.textContent =
-                        data.file.name;
 
-                    receiveFileSize.textContent =
-                        formatSize(data.file.size);
+            <button
+                type="button"
+                id="downloadAllBtn"
+                class="primary-action"
+            >
+                <span>Download all files</span>
+                <span class="arrow">↓</span>
+            </button>
 
-                    receiveDownloadBtn.onclick =
-                        () => {
+        </div>
 
-                            window.location.href =
-                                `/api/download/${code}`;
-                        };
+    </div>
 
-                    receiveResult.classList.remove(
-                        "hidden"
-                    );
+</section>
 
-                    receiveMessage.textContent =
-                        "File found.";
 
-                } catch (error) {
+<!-- ================= ABOUT ================= -->
 
-                    receiveMessage.textContent =
-                        error.message ||
-                        "File not found.";
-                }
-            }
-        );
+<section
+    class="info-section"
+    id="about"
+>
 
-        // ==========================
-        // CLEAR
-        // ==========================
+    <div class="section-container">
 
-        clearBtn.addEventListener(
-            "click",
-            () => {
+        <div class="info-grid">
 
-                selectedFile = null;
+            <div>
 
-                fileInput.value = "";
+                <span class="eyebrow">
+                    ABOUT DROPBOX LOCAL
+                </span>
 
-                fileList.innerHTML = "";
+                <h2>
+                    Sharing should
+                    be simple.
+                </h2>
 
-                uploadMessage.textContent = "";
+            </div>
 
-                resultCard.classList.add(
-                    "hidden"
-                );
-            }
-        );
+            <div>
 
-        // ==========================
-        // URL CODE
-        // ==========================
+                <p class="large-text">
+                    DropBox Local is designed to
+                    make sending files between devices
+                    quick and straightforward.
+                </p>
 
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
+                <p>
+                    Upload your files, get a share code,
+                    and send it to the person who needs
+                    the files.
+                </p>
 
-        const urlCode =
-            params.get("code");
+            </div>
 
-        if (urlCode) {
+        </div>
 
-            codeInput.value =
-                urlCode;
+    </div>
 
-            receiveBtn.click();
-        }
+</section>
 
-        // ==========================
-        // HELPERS
-        // ==========================
 
-        function formatSize(bytes) {
+<!-- ================= FAQ ================= -->
 
-            if (bytes === 0) {
-                return "0 Bytes";
-            }
+<section
+    class="faq-section"
+    id="faq"
+>
 
-            const units = [
-                "Bytes",
-                "KB",
-                "MB",
-                "GB"
-            ];
+    <div class="section-container">
 
-            const index =
-                Math.floor(
-                    Math.log(bytes) /
-                    Math.log(1024)
-                );
+        <div class="section-heading center">
 
-            return (
-                bytes /
-                Math.pow(1024, index)
-            ).toFixed(2) +
-                " " +
-                units[index];
-        }
+            <span class="eyebrow">
+                FAQ
+            </span>
 
-        function escapeHtml(text) {
+            <h2>
+                Frequently asked questions
+            </h2>
 
-            const div =
-                document.createElement("div");
+        </div>
 
-            div.textContent = text;
 
-            return div.innerHTML;
-        }
-    </script>
+        <div class="faq-grid">
+
+            <details>
+                <summary>
+                    How do I share files?
+                    <span>+</span>
+                </summary>
+
+                <p>
+                    Select or drag your files into
+                    the upload area and click
+                    Upload & Share. You will receive
+                    a share code and link.
+                </p>
+            </details>
+
+
+            <details>
+                <summary>
+                    Can I send multiple files?
+                    <span>+</span>
+                </summary>
+
+                <p>
+                    Yes. DropBox Local supports
+                    selecting multiple files in
+                    one transfer.
+                </p>
+            </details>
+
+
+            <details>
+                <summary>
+                    How does the receiver get my files?
+                    <span>+</span>
+                </summary>
+
+                <p>
+                    Send them your share code or
+                    link. They can enter the code
+                    in the Receive Files section.
+                </p>
+            </details>
+
+
+            <details>
+                <summary>
+                    Do transfers expire?
+                    <span>+</span>
+                </summary>
+
+                <p>
+                    Yes. Transfers are temporary
+                    and are automatically removed
+                    after their expiry period.
+                </p>
+            </details>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+
+            <div class="brand-icon small">
+                <span></span>
+                <span></span>
+            </div>
+
+            <div>
+                <strong>DropBox Local</strong>
+                <p>
+                    Simple file sharing.
+                </p>
+            </div>
+
+        </div>
+
+        <p>
+            © <span id="currentYear"></span>
+            DropBox Local
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- ================= TOAST ================= -->
+
+<div
+    class="toast"
+    id="toast"
+    hidden
+>
+
+    <div
+        class="toast-icon"
+        id="toastIcon"
+    >
+        ✓
+    </div>
+
+    <span id="toastMessage">
+        Done
+    </span>
+
+</div>
+
+
+<script src="app.js"></script>
 
 </body>
-
 </html>
