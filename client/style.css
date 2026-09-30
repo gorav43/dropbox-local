@@ -1,0 +1,619 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+    --bg: #07080c;
+    --bg-soft: #0c0e14;
+    --card: rgba(18, 20, 28, 0.82);
+    --card-solid: #11131b;
+    --border: rgba(255, 255, 255, 0.09);
+
+    --text: #f5f7fb;
+    --muted: #8d93a3;
+
+    --blue: #4f7cff;
+    --blue-hover: #638bff;
+    --blue-soft: rgba(79, 124, 255, 0.12);
+
+    --success: #36d399;
+    --danger: #ff5c6c;
+
+    --radius: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(79, 124, 255, 0.13),
+            transparent 35%
+        ),
+        var(--bg);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: min(960px, 92%);
+    margin: auto;
+    padding: 55px 0 80px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+h1 {
+    text-align: center;
+
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(38px, 7vw, 64px);
+    font-weight: 700;
+
+    letter-spacing: -2px;
+
+    background: linear-gradient(
+        135deg,
+        #ffffff,
+        #aebcff
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 15px;
+
+    margin-top: 12px;
+    margin-bottom: 38px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    position: relative;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 28px;
+
+    margin-bottom: 22px;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.card h2 {
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 21px;
+
+    margin-bottom: 7px;
+}
+
+.card > .subtitle {
+    text-align: left;
+
+    margin: 0 0 20px;
+}
+
+/* =========================
+   DROP ZONE
+========================= */
+
+.drop-zone {
+    position: relative;
+
+    min-height: 260px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    border: 1px dashed rgba(255, 255, 255, 0.17);
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.025),
+            rgba(255, 255, 255, 0.008)
+        );
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+
+    cursor: pointer;
+}
+
+.drop-zone::before {
+    content: "↑";
+
+    width: 62px;
+    height: 62px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 17px;
+
+    font-size: 28px;
+
+    color: var(--blue);
+
+    background: var(--blue-soft);
+
+    border: 1px solid rgba(79, 124, 255, 0.18);
+}
+
+.drop-zone:hover {
+    border-color: rgba(79, 124, 255, 0.55);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(79, 124, 255, 0.07),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    transform: translateY(-1px);
+}
+
+.drop-zone h2 {
+    font-size: 20px;
+
+    margin-bottom: 8px;
+}
+
+.drop-zone p {
+    color: var(--muted);
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+    border: 0;
+    outline: 0;
+
+    font-family: inherit;
+    font-weight: 600;
+
+    font-size: 14px;
+
+    padding: 12px 18px;
+
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        opacity 0.18s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+.primary {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f7cff,
+            #4168dc
+        );
+
+    box-shadow:
+        0 8px 25px rgba(79, 124, 255, 0.18);
+}
+
+.primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #638bff,
+            #4f7cff
+        );
+}
+
+.secondary {
+    color: #d8dce6;
+
+    background: #1a1d26;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.secondary:hover {
+    background: #20242f;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+/* =========================
+   FILE LIST
+========================= */
+
+.file-list {
+    margin-top: 15px;
+}
+
+.file-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 16px;
+
+    background: #0d1017;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 13px;
+
+    animation: slideUp 0.2s ease;
+}
+
+.file-name {
+    max-width: 75%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+
+    color: #e9ebf2;
+}
+
+.file-item > div:last-child {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result {
+    margin-top: 17px;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(79, 124, 255, 0.07),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    border: 1px solid rgba(79, 124, 255, 0.14);
+
+    border-radius: 16px;
+}
+
+.result > p {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-bottom: 8px;
+}
+
+.code {
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    letter-spacing: 6px;
+
+    color: #ffffff;
+
+    margin-bottom: 22px;
+}
+
+/* =========================
+   SHARE LINK
+========================= */
+
+.share-link {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    color: #cbd1df;
+
+    background: #090b10;
+
+    border: 1px solid rgba(255, 255, 255, 0.09);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 13px;
+}
+
+.share-link:focus {
+    border-color: rgba(79, 124, 255, 0.5);
+}
+
+/* =========================
+   RECEIVE
+========================= */
+
+.receive-row {
+    display: flex;
+
+    gap: 10px;
+}
+
+.receive-row input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px 15px;
+
+    color: white;
+
+    background: #090b10;
+
+    border: 1px solid rgba(255, 255, 255, 0.09);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition: border 0.2s ease;
+}
+
+.receive-row input::placeholder {
+    color: #5f6573;
+}
+
+.receive-row input:focus {
+    border-color: rgba(79, 124, 255, 0.55);
+}
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+.download-area {
+    margin-top: 17px;
+}
+
+.download-area .result {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.download-area h3 {
+    font-size: 16px;
+
+    word-break: break-word;
+
+    margin-bottom: 7px;
+}
+
+.download-area p {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    min-height: 20px;
+
+    margin-top: 13px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   FILE INPUT
+========================= */
+
+input[type="file"] {
+    display: none;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes slideUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #07080c;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #242936;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #303746;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .container {
+        width: 94%;
+
+        padding-top: 35px;
+    }
+
+    .card {
+        padding: 18px;
+
+        border-radius: 16px;
+    }
+
+    .drop-zone {
+        min-height: 230px;
+    }
+
+    .actions {
+        grid-template-columns: 1fr;
+    }
+
+    .receive-row {
+        flex-direction: column;
+    }
+
+    .download-area .result {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .file-item {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .file-name {
+        max-width: 100%;
+    }
+
+    .code {
+        font-size: 25px;
+
+        letter-spacing: 4px;
+    }
+}

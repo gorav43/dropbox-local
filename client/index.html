@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DropBox Local</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <h1>DropBox Local</h1>
+
+        <p class="subtitle">
+            Fast and simple file sharing
+        </p>
+
+        <!-- UPLOAD -->
+
+        <section class="card">
+
+            <div class="drop-zone" id="dropZone">
+
+                <h2>Drop your file here</h2>
+
+                <p>
+                    or click to select a file
+                </p>
+
+                <button class="primary" type="button" id="chooseBtn">
+                    Choose File
+                </button>
+
+                <input type="file" id="fileInput">
+
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+
+            <div class="actions">
+
+                <button class="primary" id="uploadBtn" type="button">
+                    Upload File
+                </button>
+
+                <button class="secondary" id="clearBtn" type="button">
+                    Clear
+                </button>
+
+            </div>
+
+            <div class="message" id="uploadMessage"></div>
+
+        </section>
+
+        <!-- RESULT -->
+
+        <section class="card hidden" id="resultCard">
+
+            <h2>File Ready</h2>
+
+            <div class="result">
+
+                <p>Share Code</p>
+
+                <div class="code" id="shareCode">
+                    ------
+                </div>
+
+                <p>Share Link</p>
+
+                <input class="share-link" id="shareLink" readonly>
+
+                <div class="actions">
+
+                    <button class="primary" id="copyBtn" type="button">
+                        Copy Link
+                    </button>
+
+                    <button class="secondary" id="downloadBtn" type="button">
+                        Download
+                    </button>
+
+                </div>
+
+                <div class="message" id="expiryMessage"></div>
+
+            </div>
+
+        </section>
+
+        <!-- RECEIVE -->
+
+        <section class="card">
+
+            <h2>Receive File</h2>
+
+            <p class="subtitle">
+                Enter the share code
+            </p>
+
+            <div class="receive-row">
+
+                <input type="text" id="codeInput" placeholder="Example: A1B2C3D4">
+
+                <button class="primary" id="receiveBtn" type="button">
+                    Find File
+                </button>
+
+            </div>
+
+            <div class="message" id="receiveMessage"></div>
+
+            <div class="download-area hidden" id="receiveResult">
+
+                <div class="result">
+
+                    <h3 id="receiveFileName">
+                        File
+                    </h3>
+
+                    <p id="receiveFileSize"></p>
+
+                    <button class="primary" id="receiveDownloadBtn" type="button">
+                        Download File
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        const fileInput =
+            document.getElementById("fileInput");
+
+        const dropZone =
+            document.getElementById("dropZone");
+
+        const chooseBtn =
+            document.getElementById("chooseBtn");
+
+        const fileList =
+            document.getElementById("fileList");
+
+        const uploadBtn =
+            document.getElementById("uploadBtn");
+
+        const clearBtn =
+            document.getElementById("clearBtn");
+
+        const uploadMessage =
+            document.getElementById("uploadMessage");
+
+        const resultCard =
+            document.getElementById("resultCard");
+
+        const shareCode =
+            document.getElementById("shareCode");
+
+        const shareLink =
+            document.getElementById("shareLink");
+
+        const copyBtn =
+            document.getElementById("copyBtn");
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+        const expiryMessage =
+            document.getElementById("expiryMessage");
+
+        const codeInput =
+            document.getElementById("codeInput");
+
+        const receiveBtn =
+            document.getElementById("receiveBtn");
+
+        const receiveMessage =
+            document.getElementById("receiveMessage");
+
+        const receiveResult =
+            document.getElementById("receiveResult");
+
+        const receiveFileName =
+            document.getElementById("receiveFileName");
+
+        const receiveFileSize =
+            document.getElementById("receiveFileSize");
+
+        const receiveDownloadBtn =
+            document.getElementById(
+                "receiveDownloadBtn"
+            );
+
+        let selectedFile = null;
+        let currentCode = null;
+
+        // ==========================
+        // FILE SELECT
+        // ==========================
+
+        chooseBtn.addEventListener(
+            "click",
+            () => fileInput.click()
+        );
+
+        dropZone.addEventListener(
+            "click",
+            (event) => {
+
+                if (event.target === chooseBtn) {
+                    return;
+                }
+
+                fileInput.click();
+            }
+        );
+
+        fileInput.addEventListener(
+            "change",
+            () => {
+
+                if (fileInput.files.length > 0) {
+
+                    selectedFile =
+                        fileInput.files[0];
+
+                    showSelectedFile();
+                }
+            }
+        );
+
+        // ==========================
+        // DRAG & DROP
+        // ==========================
+
+        dropZone.addEventListener(
+            "dragover",
+            (event) => {
+                event.preventDefault();
+            }
+        );
+
+        dropZone.addEventListener(
+            "drop",
+            (event) => {
+
+                event.preventDefault();
+
+                if (event.dataTransfer.files.length > 0) {
+
+                    selectedFile =
+                        event.dataTransfer.files[0];
+
+                    showSelectedFile();
+                }
+            }
+        );
+
+        // ==========================
+        // SHOW FILE
+        // ==========================
+
+        function showSelectedFile() {
+
+            if (!selectedFile) {
+                return;
+            }
+
+            fileList.innerHTML = `
+                <div class="file-item">
+                    <div class="file-name">
+                        ${escapeHtml(selectedFile.name)}
+                    </div>
+
+                    <div>
+                        ${formatSize(selectedFile.size)}
+                    </div>
+                </div>
+            `;
+
+            uploadMessage.textContent = "";
+        }
+
+        // ==========================
+        // UPLOAD
+        // ==========================
+
+        uploadBtn.addEventListener(
+            "click",
+            async () => {
+
+                if (!selectedFile) {
+
+                    uploadMessage.textContent =
+                        "Please select a file first.";
+
+                    return;
+                }
+
+                uploadBtn.disabled = true;
+
+                uploadMessage.textContent =
+                    "Uploading...";
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "file",
+                    selectedFile
+                );
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/upload",
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
+
+                    const data =
+                        await response.json();
+
+                    if (!response.ok ||
+                        !data.success) {
+
+                        throw new Error(
+                            data.message ||
+                            "Upload failed"
+                        );
+                    }
+
+                    currentCode =
+                        data.file.code;
+
+                    shareCode.textContent =
+                        data.file.code;
+
+                    shareLink.value =
+                        data.file.shareUrl;
+
+                    expiryMessage.textContent =
+                        "This file will expire in 10 minutes.";
+
+                    resultCard.classList.remove(
+                        "hidden"
+                    );
+
+                    uploadMessage.textContent =
+                        "Upload successful.";
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    uploadMessage.textContent =
+                        error.message ||
+                        "Upload failed.";
+
+                } finally {
+
+                    uploadBtn.disabled = false;
+                }
+            }
+        );
+
+        // ==========================
+        // COPY
+        // ==========================
+
+        copyBtn.addEventListener(
+            "click",
+            async () => {
+
+                await navigator.clipboard.writeText(
+                    shareLink.value
+                );
+
+                copyBtn.textContent =
+                    "Copied!";
+
+                setTimeout(() => {
+
+                    copyBtn.textContent =
+                        "Copy Link";
+
+                }, 1500);
+            }
+        );
+
+        // ==========================
+        // DOWNLOAD OWNER FILE
+        // ==========================
+
+        downloadBtn.addEventListener(
+            "click",
+            () => {
+
+                if (!currentCode) {
+                    return;
+                }
+
+                window.location.href =
+                    `/api/download/${currentCode}`;
+            }
+        );
+
+        // ==========================
+        // RECEIVE
+        // ==========================
+
+        receiveBtn.addEventListener(
+            "click",
+            async () => {
+
+                const code =
+                    codeInput.value
+                        .trim()
+                        .toUpperCase();
+
+                if (!code) {
+
+                    receiveMessage.textContent =
+                        "Enter a share code.";
+
+                    return;
+                }
+
+                receiveMessage.textContent =
+                    "Searching...";
+
+                receiveResult.classList.add(
+                    "hidden"
+                );
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/api/file/${encodeURIComponent(code)}`
+                        );
+
+                    const data =
+                        await response.json();
+
+                    if (!response.ok ||
+                        !data.success) {
+
+                        throw new Error(
+                            data.message ||
+                            "File not found"
+                        );
+                    }
+
+                    receiveFileName.textContent =
+                        data.file.name;
+
+                    receiveFileSize.textContent =
+                        formatSize(data.file.size);
+
+                    receiveDownloadBtn.onclick =
+                        () => {
+
+                            window.location.href =
+                                `/api/download/${code}`;
+                        };
+
+                    receiveResult.classList.remove(
+                        "hidden"
+                    );
+
+                    receiveMessage.textContent =
+                        "File found.";
+
+                } catch (error) {
+
+                    receiveMessage.textContent =
+                        error.message ||
+                        "File not found.";
+                }
+            }
+        );
+
+        // ==========================
+        // CLEAR
+        // ==========================
+
+        clearBtn.addEventListener(
+            "click",
+            () => {
+
+                selectedFile = null;
+
+                fileInput.value = "";
+
+                fileList.innerHTML = "";
+
+                uploadMessage.textContent = "";
+
+                resultCard.classList.add(
+                    "hidden"
+                );
+            }
+        );
+
+        // ==========================
+        // URL CODE
+        // ==========================
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const urlCode =
+            params.get("code");
+
+        if (urlCode) {
+
+            codeInput.value =
+                urlCode;
+
+            receiveBtn.click();
+        }
+
+        // ==========================
+        // HELPERS
+        // ==========================
+
+        function formatSize(bytes) {
+
+            if (bytes === 0) {
+                return "0 Bytes";
+            }
+
+            const units = [
+                "Bytes",
+                "KB",
+                "MB",
+                "GB"
+            ];
+
+            const index =
+                Math.floor(
+                    Math.log(bytes) /
+                    Math.log(1024)
+                );
+
+            return (
+                bytes /
+                Math.pow(1024, index)
+            ).toFixed(2) +
+                " " +
+                units[index];
+        }
+
+        function escapeHtml(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+        }
+    </script>
+
+</body>
+
+</html>
