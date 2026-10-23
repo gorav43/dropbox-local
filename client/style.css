@@ -1498,57 +1498,6 @@ a {
 
 
 /* =========================================================
-   TOAST
-========================================================= */
-
-.toast {
-    position: fixed;
-
-    right: 25px;
-    bottom: 25px;
-
-    min-width: 230px;
-
-    padding: 13px 16px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    background: #252525;
-
-    border: 1px solid #3b3b3b;
-
-    border-radius: 12px;
-
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-
-    z-index: 999;
-
-    font-size: 12px;
-}
-
-.toast-icon {
-    width: 25px;
-    height: 25px;
-
-    border-radius: 50%;
-
-    background: var(--success);
-
-    color: #111;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
    SCROLLBAR
 ========================================================= */
 
